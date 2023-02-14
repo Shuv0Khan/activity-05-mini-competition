@@ -6,3 +6,25 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r}
+library(tidyverse)
+```
+
+
+# Loading data
+```{r}
+data <- read_csv('data/allendale-students.csv');
+head(data)
+```
+
+## Coding non-numeric variables
+
+```{r}
+# Taking off-campus as 0 and on-campus as 1
+data %>% mutate(housing_coded = if_else(housing == 'off campus', 0, 1))
+
+# Taking major other=0, business=1, STEM=2
+data %>% mutate(major_coded = if_else(major == 'other', 0, if_else(major == 'business', 1, 2)))
+```
+

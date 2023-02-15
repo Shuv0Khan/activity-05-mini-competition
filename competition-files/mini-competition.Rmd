@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 library(tidyverse)
+library(tidymodels)
 ```
 
 
@@ -22,9 +23,28 @@ head(data)
 
 ```{r}
 # Taking off-campus as 0 and on-campus as 1
-data %>% mutate(housing_coded = if_else(housing == 'off campus', 0, 1))
+data <- data %>% mutate(housing_coded = if_else(housing == 'off campus', 0, 1))
 
 # Taking major other=0, business=1, STEM=2
-data %>% mutate(major_coded = if_else(major == 'other', 0, if_else(major == 'business', 1, 2)))
+data <- data %>% mutate(major_coded = if_else(major == 'other', 0, if_else(major == 'business', 1, 2)))
+```
+## Scatter plot matrix (without normalisation)
+
+```{r}
+pairs(data[,c(1,2,3,4,7)], pch = 19, lower.panel = NULL)
+
+```
+## Normalization with standard scaling
+
+```{r}
+data <- data %>% mutate(distance_norm = scale(data$distance)) %>%
+  mutate(scholarship_norm = scale(data$scholarship)) %>%
+  mutate(parents_norm = scale(data$parents)) %>%
+  mutate(car_norm = scale(data$car))
+```
+
+## Scatter plot matrix (with normalisation)
+```{r}
+pairs(data[,c(7,10,11,12,13)], pch = 19, lower.panel = NULL)
 ```
 
